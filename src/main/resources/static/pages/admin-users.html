@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - User List</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body style="padding: 2rem; max-width: 1000px; margin: 0 auto;">
+    <h1>Admin: Registered Users</h1>
+    <div class="glass-panel" style="padding: 0;">
+        <table id="user-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Designation</th>
+                    <th>Roles</th>
+                    <th>ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populated via JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadUsers() {
+            try {
+                const res = await fetch('/api/users/all');
+                const users = await res.json();
+                const tbody = document.querySelector('#user-table tbody');
+
+                users.forEach(u => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="font-weight:bold;">${u.username}</td>
+                        <td>${u.email || '-'}</td>
+                        <td>${u.designation || '-'}</td>
+                        <td><span class="badge" style="background:#6366f1;">${u.roles || 'USER'}</span></td>
+                        <td style="font-family:monospace; color:var(--text-muted);">${u.id}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                alert("Failed to load users: " + err);
+            }
+        }
+        loadUsers();
+    </script>
+</body>
+
+</html>
