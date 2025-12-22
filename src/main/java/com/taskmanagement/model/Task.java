@@ -30,4 +30,7 @@ public class Task {
 
     // Todoist Features
     private String project = "Inbox";
+
+    // Multi-tenancy
+    private String company;
 }

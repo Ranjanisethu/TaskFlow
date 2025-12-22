@@ -20,6 +20,8 @@ public class User {
     // Profile
     private String email;
     private String designation;
+    private String company; // For Multi-tenancy Isolation
+    private String department;
 
     // Preferences
     private String theme = "light"; // light, dark

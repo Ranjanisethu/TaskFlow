@@ -28,8 +28,9 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        Task createdTask = taskService.createTask(task);
+    public Task createTask(@RequestBody Task task, java.security.Principal principal) {
+        String username = (principal != null) ? principal.getName() : "anonymous";
+        Task createdTask = taskService.createTask(task, username);
         messagingTemplate.convertAndSend("/topic/tasks", createdTask); // Real-time update
         return createdTask;
     }

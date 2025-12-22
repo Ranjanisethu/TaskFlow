@@ -77,6 +77,7 @@ async function handleRegister(e) {
     e.preventDefault();
     const username = document.getElementById('reg-username').value;
     const email = document.getElementById('reg-email').value;
+    const company = document.getElementById('reg-company').value;
     const password = document.getElementById('reg-password').value;
 
     // PASSWORD VALIDATION
@@ -90,7 +91,7 @@ async function handleRegister(e) {
         const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, email })
+            body: JSON.stringify({ username, password, email, company })
         });
 
         if (response.ok) {

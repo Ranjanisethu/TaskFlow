@@ -25,38 +25,37 @@ public class TaskService {
     }
 
     public List<Task> getTasksForUser(String username) {
-        // Fetch ALL tasks (simplest fix for small app) and filter in memory
-        // Or better: update Repository to findByAssignedToOrCreatedBy, but let's stick
-        // to simple logic first.
-        // NOTE: Currently, we don't have a 'createdBy' field in Task.java properly
-        // populated.
-        // FIX: We will return ALL tasks for now so everyone sees everything
-        // (Collaborative Mode).
-        // If you want strict privacy, we need to add 'createdBy' field to Task model.
-        return taskRepository.findAll();
+        // Multi-tenancy Isolation: Only show tasks for user's company
+        Optional<com.taskmanagement.model.User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isPresent()) {
+            String company = userOpt.get().getCompany();
+            if (company == null)
+                company = "Freelancers"; // Fallback
+
+            final String targetCompany = company; // Effective final for lambda
+            // Filter tasks
+            return taskRepository.findAll().stream()
+                    .filter(t -> targetCompany.equals(t.getCompany()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+        return java.util.Collections.emptyList();
     }
 
-    public Task createTask(Task task) {
+    public Task createTask(Task task, String username) {
+        // Assign company from creator
+        userRepository.findByUsername(username).ifPresent(user -> {
+            String company = user.getCompany();
+            task.setCompany(company != null ? company : "Freelancers");
+        });
+
         task.setCreatedAt(LocalDateTime.now());
         Task savedTask = taskRepository.save(task);
 
-        // Send Email Notification if assigned
+        // Send Email Notification (Mock)
         if (task.getAssignedTo() != null && !task.getAssignedTo().isEmpty()) {
             userRepository.findByUsername(task.getAssignedTo()).ifPresent(user -> {
-                if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-                    emailService.sendEmail(
-                            user.getEmail(),
-                            "New Task Assigned: " + task.getTitle(),
-                            "Hello " + user.getUsername() + ",\n\nYou have been assigned a new task:\n\n" +
-                                    "Title: " + task.getTitle() + "\n" +
-                                    "Description: "
-                                    + (task.getDescription() != null ? task.getDescription() : "No description") + "\n"
-                                    +
-                                    "Priority: " + task.getPriority() + "\n" +
-                                    "Due Date: " + task.getDueDate() + "\n\n" +
-                                    "View Dashboard: https://taskflow-wzvv.onrender.com\n\n" +
-                                    "Happy Productivity,\nTaskFlow Team");
-                }
+                System.out.println("--- [MOCK EMAIL] To: " + user.getEmail() + " | Subject: New Task Assigned | Task: "
+                        + task.getTitle() + " ---");
             });
         }
 

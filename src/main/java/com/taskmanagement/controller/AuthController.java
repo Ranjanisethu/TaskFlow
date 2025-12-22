@@ -29,13 +29,14 @@ public class AuthController {
         String username = payload.get("username");
         String password = payload.get("password");
         String email = payload.get("email");
+        String company = payload.get("company"); // Get Company Name
 
         // Basic Backend Validation
         if (password.length() < 8) {
             return ResponseEntity.badRequest().body("Password must be at least 8 characters");
         }
 
-        userService.registerUser(username, password, email);
+        userService.registerUser(username, password, email, company);
         return ResponseEntity.ok("User registered successfully");
     }
 

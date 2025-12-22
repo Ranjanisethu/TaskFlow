@@ -19,7 +19,21 @@ public class UserController {
 
     @GetMapping
     public List<String> getAllUsernames() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = auth.getName();
+
+        User currentUser = userRepository.findByUsername(currentUsername).orElse(null);
+        if (currentUser == null)
+            return java.util.Collections.emptyList();
+
+        String myCompany = currentUser.getCompany();
+        if (myCompany == null)
+            myCompany = "Freelancers";
+
+        final String targetCompany = myCompany;
+
         return userRepository.findAll().stream()
+                .filter(u -> targetCompany.equals(u.getCompany()))
                 .map(User::getUsername)
                 .collect(Collectors.toList());
     }

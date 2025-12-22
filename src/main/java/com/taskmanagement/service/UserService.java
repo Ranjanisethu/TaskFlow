@@ -18,13 +18,14 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
-    public User registerUser(String username, String password, String email) {
+    public User registerUser(String username, String password, String email, String company) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
         User user = new User();
         user.setUsername(username);
-        user.setEmail(email); // Save email
+        user.setEmail(email);
+        user.setCompany(company != null && !company.trim().isEmpty() ? company : "Freelancers"); // Default if missing
         user.setPassword(passwordEncoder.encode(password));
         return userRepository.save(user);
     }
