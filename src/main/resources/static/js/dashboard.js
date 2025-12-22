@@ -1166,9 +1166,20 @@ async function handleCreateTask(e) {
         });
 
         if (res.ok) {
+            const createdTask = await res.json(); // Get the actual saved task from server
             closeCreateTaskModal();
-            // Stomp will handle update
             showNotification(`Task "${title}" created!`);
+
+            // OPTIMISTIC UPDATE: Add to UI immediately
+            // Check if it already exists to avoid duplicates from WebSocket
+            if (!allTasks.find(t => t.id === createdTask.id)) {
+                allTasks.push(createdTask);
+                if (currentViewMode === 'kanban') {
+                    renderKanbanBoard();
+                } else {
+                    renderTaskTable();
+                }
+            }
         }
     } catch (err) {
         console.error(err);
