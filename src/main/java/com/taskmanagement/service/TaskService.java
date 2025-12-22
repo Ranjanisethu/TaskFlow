@@ -49,9 +49,13 @@ public class TaskService {
                             "New Task Assigned: " + task.getTitle(),
                             "Hello " + user.getUsername() + ",\n\nYou have been assigned a new task:\n\n" +
                                     "Title: " + task.getTitle() + "\n" +
+                                    "Description: "
+                                    + (task.getDescription() != null ? task.getDescription() : "No description") + "\n"
+                                    +
                                     "Priority: " + task.getPriority() + "\n" +
                                     "Due Date: " + task.getDueDate() + "\n\n" +
-                                    "Please log in to the dashboard to view details.");
+                                    "View Dashboard: https://taskflow-wzvv.onrender.com\n\n" +
+                                    "Happy Productivity,\nTaskFlow Team");
                 }
             });
         }
