@@ -49,6 +49,37 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
+/* Custom Confirm Modal */
+function showConfirm(message, title = "Are you sure?") {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('confirm-modal');
+        const titleEl = document.getElementById('confirm-title');
+        const msgEl = document.getElementById('confirm-message');
+        const btnOk = document.getElementById('confirm-ok-btn');
+        const btnCancel = document.getElementById('confirm-cancel-btn');
+
+        if (!modal) {
+            // Fallback if modal HTML missing
+            resolve(confirm(message));
+            return;
+        }
+
+        titleEl.textContent = title;
+        msgEl.textContent = message;
+        modal.style.display = 'flex';
+
+        btnOk.onclick = () => {
+            modal.style.display = 'none';
+            resolve(true);
+        };
+
+        btnCancel.onclick = () => {
+            modal.style.display = 'none';
+            resolve(false);
+        };
+    });
+}
+
 
 /* --- Auth & Init --- */
 async function checkAuth() {
@@ -833,17 +864,20 @@ function render2FAState(isEnabled) {
 }
 
 function changePasswordMock() {
-    const current = prompt("Enter current password:");
-    if (current) {
-        const newPass = prompt("Enter new password:");
-        if (newPass) {
-            showNotification("Success: Password changed successfully!");
-        }
-    }
+    document.getElementById('cp-current').value = '';
+    document.getElementById('cp-new').value = '';
+    document.getElementById('password-modal').style.display = 'flex';
 }
 
-function logoutOtherSessions() {
-    if (confirm("Are you sure you want to log out all other active sessions?")) {
+function handleChangePasswordSubmit(e) {
+    e.preventDefault();
+    // In a real app, this would call an API
+    document.getElementById('password-modal').style.display = 'none';
+    showNotification("Success: Password changed successfully!");
+}
+
+async function logoutOtherSessions() {
+    if (await showConfirm("Are you sure you want to log out all other active sessions?", "Logout Sessions")) {
         setTimeout(() => {
             showNotification("Success: All other sessions have been logged out.");
         }, 500);
@@ -852,7 +886,7 @@ function logoutOtherSessions() {
 
 /* Data Actions */
 async function clearCompletedTasks() {
-    if (!confirm("Delete ALL completed tasks? This cannot be undone.")) return;
+    if (!await showConfirm("Delete ALL completed tasks? This cannot be undone.", "Clear All Done tasks")) return;
 
     const completed = allTasks.filter(t => t.status === 'DONE');
     let count = 0;
@@ -1188,7 +1222,7 @@ async function handleCreateTask(e) {
 }
 
 async function deleteTask(id) {
-    if (!confirm('Are you sure?')) return;
+    if (!await showConfirm('Are you sure you want to delete this task?', 'Delete Task')) return;
     await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
     showNotification('Task deleted');
 }
