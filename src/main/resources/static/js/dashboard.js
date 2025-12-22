@@ -1175,7 +1175,7 @@ async function handleCreateTask(e) {
             if (!allTasks.find(t => t.id === createdTask.id)) {
                 allTasks.push(createdTask);
                 if (currentViewMode === 'kanban') {
-                    renderKanbanBoard();
+                    renderKanban();
                 } else {
                     renderTaskTable();
                 }
