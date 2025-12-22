@@ -43,31 +43,43 @@
 }
 
 /* Liquid Lava / Mesh Gradient Animation */
+/* Liquid Lava / Mesh Gradient Animation - OPTIMIZED FOR MOBILE */
 body {
-    /* Liquid Lava Mesh Gradient - Vibrant */
-    background: linear-gradient(-45deg, #7c3aed, #db2777, #ea580c, #2563eb);
-    background-size: 400% 400%;
-    animation: liquidLava 20s ease infinite;
-
     color: var(--text-main);
     font-family: var(--font-family);
     min-height: 100vh;
+    min-height: 100dvh;
+    /* Mobile fix */
     overflow-x: hidden;
     position: relative;
 
     /* READABILITY BOOST - PURE BLACK */
     color: #000000 !important;
     font-weight: 800;
-    /* Extra Bold */
     text-shadow: none;
-    /* No white halo/outline */
     letter-spacing: 0.5px;
 }
 
-[data-theme="light"] body {
-    background: linear-gradient(-45deg, #c4b5fd, #f9a8d4, #fdba74, #93c5fd);
+/* Fixed Background Layer */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: linear-gradient(-45deg, #7c3aed, #db2777, #ea580c, #2563eb);
     background-size: 400% 400%;
     animation: liquidLava 20s ease infinite;
+    pointer-events: none;
+}
+
+/* Added to body in previous steps */
+
+[data-theme="light"] body::before {
+    background: linear-gradient(-45deg, #c4b5fd, #f9a8d4, #fdba74, #93c5fd);
+    background-size: 400% 400%;
 }
 
 @keyframes liquidLava {

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskFlow - Dashboard</title>
     <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/000000/task-completed.png">
-    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,10 +16,6 @@
 </head>
 
 <body>
-    <div id="notification-container"
-        style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 0.5rem; width: auto; align-items: center;">
-    </div>
-
     <div class="app-container">
         <aside class="sidebar">
             <div class="logo">
@@ -27,27 +23,30 @@
             </div>
             <ul class="nav-links">
                 <li class="nav-item active" onclick="switchView('kanban')">
-                    <i class='bx bxs-dashboard'></i> <span data-i18n="nav_tasks">Tasks</span>
+                    <i class='bx bxs-dashboard'></i> <span>Tasks</span>
                 </li>
                 <!-- Project Management -->
                 <li class="nav-item" onclick="switchView('projects')">
-                    <i class='bx bxs-folder-open'></i> <span data-i18n="nav_projects">Projects</span>
+                    <i class='bx bxs-folder-open'></i> <span>Projects</span>
                 </li>
-                <!-- Time Log Removed -->
+                <!-- Time Management -->
+                <li class="nav-item" onclick="switchView('time')">
+                    <i class='bx bxs-time-five'></i> <span>Time Log</span>
+                </li>
                 <!-- Habit Forming -->
                 <li class="nav-item" onclick="switchView('habits')">
-                    <i class='bx bxs-flame'></i> <span data-i18n="nav_habits">Habits</span>
+                    <i class='bx bxs-flame'></i> <span>Habits</span>
                 </li>
                 <!-- Team Management -->
                 <li class="nav-item" onclick="switchView('team')">
-                    <i class='bx bxs-group'></i> <span data-i18n="nav_team">Team</span>
+                    <i class='bx bxs-group'></i> <span>Team</span>
                 </li>
 
                 <li class="nav-item" onclick="switchView('analytics')">
-                    <i class='bx bxs-bar-chart-alt-2'></i> <span data-i18n="nav_analytics">Analytics</span>
+                    <i class='bx bxs-bar-chart-alt-2'></i> <span>Analytics</span>
                 </li>
                 <li class="nav-item" onclick="switchView('settings')">
-                    <i class='bx bxs-cog'></i> <span data-i18n="nav_settings">Settings</span>
+                    <i class='bx bxs-cog'></i> <span>Settings</span>
                 </li>
             </ul>
             <div class="user-profile">
@@ -60,32 +59,22 @@
         </aside>
 
         <main class="main-content">
-            <header class="top-bar" id="main-header">
+            <header class="top-bar">
                 <div>
-                    <h1 id="page-title" data-i18n="page_title">My Tasks</h1>
-                    <p class="subtitle" data-i18n="page_subtitle">Manage code, tasks, and projects.</p>
+                    <h1 id="page-title">My Tasks</h1>
+                    <p class="subtitle">Manage code, tasks, and projects.</p>
                 </div>
-                <div style="display:flex; gap:0.5rem; margin-top:1rem;">
-                    <div style="background:var(--glass-bg); padding:0.25rem; border-radius:0.5rem; display:flex;">
-                        <button class="btn" id="btn-view-kanban" onclick="setViewMode('kanban')"
-                            style="padding:0.5rem; background:var(--primary); color:white; border-radius:0.25rem;"><i
-                                class='bx bxs-grid'></i></button>
-                        <button class="btn" id="btn-view-list" onclick="setViewMode('list')"
-                            style="padding:0.5rem; background:transparent; color:var(--text-muted); border-radius:0.25rem;"><i
-                                class='bx bx-list-ul'></i></button>
-                    </div>
-                    <button onclick="showCreateTaskModal()" class="btn btn-primary">
-                        <i class='bx bx-plus'></i> <span data-i18n="btn_new_task">New Task</span>
-                    </button>
-                </div>
+                <button onclick="showCreateTaskModal()" class="btn btn-primary">
+                    <i class='bx bx-plus'></i> New Task
+                </button>
             </header>
 
             <!-- KANBAN VIEW -->
-            <div id="view-kanban" class="view-mode-section active">
+            <div id="view-kanban" class="view-section active">
                 <div class="kanban-board">
                     <div class="kanban-column">
                         <div class="column-header">
-                            <span data-i18n="col_todo">To Do</span>
+                            <span>To Do</span>
                             <span class="badge" id="count-todo">0</span>
                         </div>
                         <div class="task-list" id="col-TODO" ondrop="drop(event)" ondragover="allowDrop(event)"
@@ -96,7 +85,7 @@
 
                     <div class="kanban-column">
                         <div class="column-header">
-                            <span data-i18n="col_inprogress">In Progress</span>
+                            <span>In Progress</span>
                             <span class="badge" id="count-inprogress">0</span>
                         </div>
                         <div class="task-list" id="col-IN_PROGRESS" ondrop="drop(event)" ondragover="allowDrop(event)"
@@ -107,7 +96,7 @@
 
                     <div class="kanban-column">
                         <div class="column-header">
-                            <span data-i18n="col_done">Done</span>
+                            <span>Done</span>
                             <span class="badge" id="count-done">0</span>
                         </div>
                         <div class="task-list" id="col-DONE" ondrop="drop(event)" ondragover="allowDrop(event)"
@@ -115,28 +104,6 @@
                             <!-- Tasks -->
                         </div>
                     </div>
-                </div>
-            </div>
-
-
-
-            <!-- LIST VIEW (New) -->
-            <div id="view-list" class="view-mode-section" style="display:none;">
-                <div class="glass-panel" style="padding:0;">
-                    <table class="task-table" style="width:100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="border-bottom: 1px solid var(--glass-border); text-align: left;">
-                                <th style="padding:1rem;">Title</th>
-                                <th style="padding:1rem;">Priority</th>
-                                <th style="padding:1rem;">Status</th>
-                                <th style="padding:1rem;">Due Date</th>
-                                <th style="padding:1rem;">Assignee</th>
-                            </tr>
-                        </thead>
-                        <tbody id="task-table-body">
-                            <!-- Rows -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
 
@@ -151,7 +118,28 @@
                 </div>
             </div>
 
-            <!-- TIME LOG VIEW REMOVED -->
+            <!-- TIME LOG VIEW -->
+            <div id="view-time" class="view-section" style="display:none;">
+                <div class="glass-panel" style="padding: 2rem;">
+                    <h2>Time Management</h2>
+                    <p class="subtitle">Track where your time goes.</p>
+                    <div style="margin-top: 2rem;">
+                        <table class="task-table" style="width: 100%;">
+                            <thead>
+                                <tr
+                                    style="text-align: left; color: var(--text-muted); border-bottom: 1px solid var(--glass-border);">
+                                    <th style="padding:1rem;">Task</th>
+                                    <th style="padding:1rem;">Time Spent</th>
+                                    <th style="padding:1rem;">Last Active</th>
+                                </tr>
+                            </thead>
+                            <tbody id="time-log-body">
+                                <!-- Time Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- HABITS VIEW -->
             <div id="view-habits" class="view-section" style="display:none;">
@@ -170,8 +158,36 @@
                 <div class="glass-panel" style="padding: 2rem;">
                     <h2>Team Members</h2>
                     <div id="team-list" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Team Users populated via JS -->
+                        <!-- Team Users -->
+                        <div
+                            style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 0.5rem;">
+                            <div class="avatar-placeholder"><i class='bx bxs-user'></i></div>
+                            <div>
+                                <div style="font-weight: 600;" id="current-user-team">User</div>
+                                <div style="font-size: 0.875rem; color: var(--text-muted);">Online</div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- LIST VIEW -->
+            <div id="view-list" class="view-section" style="display:none;">
+                <div class="glass-panel" style="padding: 1rem;">
+                    <table class="task-table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="text-align: left; border-bottom: 1px solid var(--glass-border);">
+                                <th style="padding: 1rem;">Title</th>
+                                <th style="padding: 1rem;">Status</th>
+                                <th style="padding: 1rem;">Priority</th>
+                                <th style="padding: 1rem;">Due Date</th>
+                                <th style="padding: 1rem;">Assignee</th>
+                            </tr>
+                        </thead>
+                        <tbody id="task-table-body">
+                            <!-- Table Rows -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -284,9 +300,16 @@
                                 </div>
 
                                 <button onclick="updateAppearance()" class="btn btn-primary"
-                                    style="margin-top: 1rem;">Save
-                                    Appearance</button>
-                                <!-- Display Density Removed -->
+                                    style="margin-top: 1rem;">Save Appearance</button>
+
+                                <div class="form-group">
+                                    <label class="form-label">Display Density</label>
+                                    <label
+                                        style="display:flex; align-items:center; gap:0.5rem; color:var(--text-muted); cursor:pointer;">
+                                        <input type="checkbox" id="density-toggle" onchange="toggleDensity()">
+                                        Enable Compact Mode
+                                    </label>
+                                </div>
                             </div>
 
                             <!-- 3. Preferences -->
@@ -306,9 +329,6 @@
                                         <option value="en">English (US)</option>
                                         <option value="es">Spanish</option>
                                         <option value="de">German</option>
-                                        <option value="ta">Tamil (தமிழ்)</option>
-                                        <option value="hi">Hindi (हिंदी)</option>
-                                        <option value="zh">Chinese (中文)</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -321,7 +341,7 @@
                                 <button onclick="savePreferences()" class="btn btn-primary">Save Preferences</button>
                             </div>
 
-                            <!-- 4. Notifications -->
+                            <!-- 4. Notifications (UI Mock) -->
                             <div id="setting-notifications" class="settings-section-view">
                                 <h3>Notifications</h3>
                                 <div class="form-group">
@@ -349,7 +369,7 @@
                                     Notifications</button>
                             </div>
 
-                            <!-- 5. Security -->
+                            <!-- 5. Security (UI Mock) -->
                             <div id="setting-security" class="settings-section-view">
                                 <h3>Security</h3>
                                 <div class="form-group">
@@ -358,6 +378,24 @@
                                         style="border:1px solid var(--glass-border); background:transparent;">Change
                                         Password</button>
                                 </div>
+                                <div class="form-group">
+                                    <label class="form-label">Two-Factor Authentication (2FA)</label>
+                                    <div
+                                        style="padding:1rem; border:1px solid var(--glass-border); border-radius:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+                                        <span>Protect your account with 2FA</span>
+                                        <button class="btn btn-primary"
+                                            style="padding:0.25rem 0.75rem; font-size:0.875rem;">Enable</button>
+                                    </div>
+                                </div>
+                                <h4 style="margin-top:2rem;">Active Sessions</h4>
+                                <div style="margin-top:1rem; color:var(--text-muted); font-size:0.875rem;">
+                                    <div style="padding:0.5rem 0; border-bottom:1px solid var(--glass-border);">Windows
+                                        PC - Chrome - Currently Active</div>
+                                    <div style="padding:0.5rem 0;">iPhone 13 - Safari - 2 hours ago</div>
+                                </div>
+                                <button onclick="logoutOtherSessions()" class="btn"
+                                    style="margin-top:1rem; border:1px solid var(--glass-border); background:rgba(255,255,255,0.05);">Log
+                                    Out Other Sessions</button>
                             </div>
 
                             <!-- 6. Data -->
@@ -393,13 +431,18 @@
                             <div id="setting-help" class="settings-section-view">
                                 <h3>Help & Support</h3>
                                 <div style="margin-top:1rem;">
-                                    <p style="margin-bottom:0.5rem;"><a href="pages/user-guide.html"
-                                            style="color:var(--primary);">User Guide</a></p>
-                                    <p style="margin-bottom:0.5rem;"><a href="pages/support.html"
-                                            style="color:var(--primary);">Contact Support</a></p>
-                                    <p style="margin-bottom:0.5rem;"><a href="pages/bug-report.html"
-                                            style="color:var(--primary);">Report a Bug</a></p>
-                                    <p style="color:var(--text-muted); margin-top:2rem;">TaskFlow Pro v1.2.1</p>
+                                    <p style="margin-bottom:0.5rem;"><a href="javascript:void(0)"
+                                            onclick="alert('Opening User Guide...')" style="color:var(--primary);">User
+                                            Guide</a></p>
+                                    <p style="margin-bottom:0.5rem;"><a href="javascript:void(0)"
+                                            onclick="alert('Contacting Support...')"
+                                            style="color:var(--primary);">Contact
+                                            Support</a></p>
+                                    <p style="margin-bottom:0.5rem;"><a href="javascript:void(0)"
+                                            onclick="alert('Opening Bug Report form...')"
+                                            style="color:var(--primary);">Report a
+                                            Bug</a></p>
+                                    <p style="color:var(--text-muted); margin-top:2rem;">TaskFlow Pro v1.2.0</p>
                                 </div>
                             </div>
 
@@ -413,8 +456,7 @@
     <!-- Create Task Modal -->
     <div id="create-task-modal"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 50;">
-        <div class="glass-panel"
-            style="width: 100%; max-width: 500px; padding: 2rem; max-height: 90vh; overflow-y: auto;">
+        <div class="glass-panel" style="width: 100%; max-width: 500px; padding: 2rem;">
             <h2 style="margin-bottom: 1.5rem;">Create New Task</h2>
             <form onsubmit="handleCreateTask(event)">
                 <div class="form-group"
@@ -487,7 +529,18 @@
                     style="background:none; color:var(--text-muted); font-size:1.5rem;">&times;</button>
             </div>
 
-            <!-- Time Tracking Removed -->
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Time Tracking</label>
+                <div
+                    style="display:flex; align-items:center; gap:1rem; background: rgba(0,0,0,0.2); padding:1rem; border-radius:0.5rem;">
+                    <div style="font-size:1.5rem; font-family:monospace; font-weight:700;" id="timer-display">00:00:00
+                    </div>
+                    <button id="timer-btn" onclick="toggleTimer()" class="btn btn-primary" style="padding:0.5rem 1rem;">
+                        <i class='bx bx-play'></i> Start
+                    </button>
+                    <span style="font-size:0.875rem; color:var(--text-muted);">Total spent on task</span>
+                </div>
+            </div>
 
             <div style="margin-bottom: 1.5rem;">
                 <label class="form-label">Blocked By (Dependencies)</label>
@@ -531,46 +584,6 @@
                     <button onclick="addComment()" class="btn btn-primary" style="padding:0.5rem;">Post</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Confirm Modal -->
-    <div id="confirm-modal"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 100;">
-        <div class="glass-panel" style="width: 100%; max-width: 400px; padding: 2rem; text-align: center;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;" id="confirm-icon">⚠️</div>
-            <h2 id="confirm-title" style="margin-bottom: 0.5rem;">Are you sure?</h2>
-            <p id="confirm-message" style="color: var(--text-muted); margin-bottom: 2rem;">This action cannot be undone.
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center;">
-                <button id="confirm-cancel-btn" class="btn"
-                    style="background: transparent; border: 1px solid var(--glass-border);">Cancel</button>
-                <button id="confirm-ok-btn" class="btn btn-primary" style="background: #ef4444;">Yes, Proceed</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Change Password Modal -->
-    <div id="password-modal"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 50;">
-        <div class="glass-panel" style="width: 100%; max-width: 400px; padding: 2rem;">
-            <h2>Change Password</h2>
-            <form onsubmit="handleChangePasswordSubmit(event)">
-                <div class="form-group">
-                    <label class="form-label">Current Password</label>
-                    <input type="password" id="cp-current" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">New Password</label>
-                    <input type="password" id="cp-new" class="form-input" required>
-                </div>
-                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
-                    <button type="button" onclick="document.getElementById('password-modal').style.display='none'"
-                        class="btn"
-                        style="background: transparent; border: 1px solid var(--glass-border);">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
         </div>
     </div>
 
