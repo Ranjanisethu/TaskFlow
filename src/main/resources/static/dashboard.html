@@ -459,16 +459,7 @@
         <div class="glass-panel" style="width: 100%; max-width: 500px; padding: 2rem;">
             <h2 style="margin-bottom: 1.5rem;">Create New Task</h2>
             <form onsubmit="handleCreateTask(event)">
-                <div class="form-group"
-                    style="margin-bottom: 1rem; padding: 0.5rem; border: 1px dashed var(--glass-border); border-radius: 0.5rem;">
-                    <label class="form-label" style="color: var(--primary);">✨ Template</label>
-                    <select id="task-template" class="form-input" onchange="applyTemplate()">
-                        <option value="">-- Choose a Template --</option>
-                        <option value="bug">🐛 Bug Report</option>
-                        <option value="feature">🚀 Feature Request</option>
-                        <option value="meeting">📅 Meeting</option>
-                    </select>
-                </div>
+
                 <div class="form-group">
                     <label class="form-label">Project</label>
                     <input type="text" id="task-project" class="form-input" placeholder="e.g. Inbox, Website, Marketing"
