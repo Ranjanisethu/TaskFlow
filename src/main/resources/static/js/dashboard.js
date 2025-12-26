@@ -659,6 +659,76 @@ const translations = {
         col_inprogress: "In Bearbeitung",
         col_done: "Erledigt"
     },
+    fr: {
+        nav_tasks: "Tâches",
+        nav_projects: "Projets",
+        nav_habits: "Habitudes",
+        nav_team: "Équipe",
+        nav_analytics: "Analyses",
+        nav_settings: "Paramètres",
+        page_title: "Mes Tâches",
+        page_subtitle: "Gérez le code, les tâches et les projets.",
+        btn_new_task: "Nouvelle Tâche",
+        col_todo: "À Faire",
+        col_inprogress: "En Cours",
+        col_done: "Terminé"
+    },
+    it: {
+        nav_tasks: "Attività",
+        nav_projects: "Progetti",
+        nav_habits: "Abitudini",
+        nav_team: "Team",
+        nav_analytics: "Analisi",
+        nav_settings: "Impostazioni",
+        page_title: "Le mie Attività",
+        page_subtitle: "Gestisci codice, attività e progetti.",
+        btn_new_task: "Nuova Attività",
+        col_todo: "Da Fare",
+        col_inprogress: "In Corso",
+        col_done: "Fatto"
+    },
+    pt: {
+        nav_tasks: "Tarefas",
+        nav_projects: "Projetos",
+        nav_habits: "Hábitos",
+        nav_team: "Equipe",
+        nav_analytics: "Análises",
+        nav_settings: "Configurações",
+        page_title: "Minhas Tarefas",
+        page_subtitle: "Gerencie código, tarefas e projetos.",
+        btn_new_task: "Nova Tarefa",
+        col_todo: "A Fazer",
+        col_inprogress: "Em Progresso",
+        col_done: "Concluído"
+    },
+    ru: {
+        nav_tasks: "Задачи",
+        nav_projects: "Проекты",
+        nav_habits: "Привычки",
+        nav_team: "Команда",
+        nav_analytics: "Аналитика",
+        nav_settings: "Настройки",
+        page_title: "Мои Задачи",
+        page_subtitle: "Управляйте кодом, задачами и проектами.",
+        btn_new_task: "Новая Задача",
+        col_todo: "Сделать",
+        col_inprogress: "В Процессе",
+        col_done: "Готово"
+    },
+    ja: {
+        nav_tasks: "タスク",
+        nav_projects: "プロジェクト",
+        nav_habits: "習慣",
+        nav_team: "チーム",
+        nav_analytics: "分析",
+        nav_settings: "設定",
+        page_title: "私のタスク",
+        page_subtitle: "コード、タスク、プロジェクトを管理します。",
+        btn_new_task: "新しいタスク",
+        col_todo: "ToDo",
+        col_inprogress: "進行中",
+        col_done: "完了"
+    },
     ta: {
         nav_tasks: "பணிகள்",
         nav_projects: "திட்டங்கள்",
@@ -791,6 +861,21 @@ function deleteAccount() {
         showNotification("Account reset.", 'info');
         localStorage.clear();
         window.location.reload();
+    }
+}
+
+function toggleHelpSection(section) {
+    const main = document.getElementById('help-menu');
+    // Hide all subs
+    ['guide', 'support', 'bug'].forEach(s => {
+        document.getElementById(`help-section-${s}`).style.display = 'none';
+    });
+
+    if (section === 'main') {
+        main.style.display = 'block';
+    } else {
+        main.style.display = 'none';
+        document.getElementById(`help-section-${section}`).style.display = 'block';
     }
 }
 
@@ -1007,16 +1092,7 @@ function setTheme(theme) {
     Settings.save({ theme: theme });
 }
 
-function toggleDensity() {
-    const toggle = document.getElementById('density-toggle');
-    if (toggle.checked) {
-        document.body.classList.add('compact-mode');
-        localStorage.setItem('density', 'compact');
-    } else {
-        document.body.classList.remove('compact-mode');
-        localStorage.setItem('density', 'comfortable');
-    }
-}
+
 
 function exportData() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allTasks, null, 2));

@@ -77,7 +77,7 @@ body::before {
 
 /* Added to body in previous steps */
 
-[data-theme="light"] body::before {
+body[data-theme="light"]::before {
     background: linear-gradient(-45deg, #c4b5fd, #f9a8d4, #fdba74, #93c5fd);
     background-size: 400% 400%;
 }

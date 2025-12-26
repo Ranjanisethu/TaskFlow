@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
+@SuppressWarnings("null")
 public class TaskController {
 
     @Autowired
@@ -31,14 +32,18 @@ public class TaskController {
     public Task createTask(@RequestBody Task task, java.security.Principal principal) {
         String username = (principal != null) ? principal.getName() : "anonymous";
         Task createdTask = taskService.createTask(task, username);
-        messagingTemplate.convertAndSend("/topic/tasks", createdTask); // Real-time update
+        if (createdTask != null) {
+            messagingTemplate.convertAndSend("/topic/tasks", createdTask); // Real-time update
+        }
         return createdTask;
     }
 
     @PutMapping("/{id}")
     public Task updateTask(@PathVariable String id, @RequestBody Task task) {
         Task updatedTask = taskService.updateTask(id, task);
-        messagingTemplate.convertAndSend("/topic/tasks", updatedTask); // Real-time update
+        if (updatedTask != null) {
+            messagingTemplate.convertAndSend("/topic/tasks", updatedTask); // Real-time update
+        }
         return updatedTask;
     }
 

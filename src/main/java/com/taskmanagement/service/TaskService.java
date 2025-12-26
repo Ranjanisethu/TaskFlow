@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings("null")
 public class TaskService {
 
     @Autowired
@@ -16,9 +17,6 @@ public class TaskService {
 
     @Autowired
     private com.taskmanagement.repository.UserRepository userRepository;
-
-    @Autowired
-    private EmailService emailService;
 
     public List<Task> getAllTasks() {
         return taskRepository.findAll();

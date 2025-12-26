@@ -56,6 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/profile")
+    @SuppressWarnings("null")
     public ResponseEntity<?> updateProfile(@RequestBody User updatedUser) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();

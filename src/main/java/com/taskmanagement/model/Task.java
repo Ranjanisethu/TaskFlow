@@ -13,7 +13,7 @@ public class Task {
 
     private String title;
     private String description;
-    private String status; // TODO, IN_PROGRESS, DONE
+    private String status; // ToDo, IN_PROGRESS, DONE
     private String priority; // LOW, MEDIUM, HIGH
     private String assignedTo; // username
     private LocalDateTime dueDate;
